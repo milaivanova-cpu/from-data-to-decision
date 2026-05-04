@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Подготовка преди посещение</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --accent: #1d4ed8;
+      --accent-soft: #dbeafe;
+      --warning: #f59e0b;
+      --warning-soft: #fff7ed;
+      --success: #047857;
+      --success-soft: #ecfdf5;
+      --danger: #b91c1c;
+      --danger-soft: #fef2f2;
+      --radius: 18px;
+      --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a, #1d4ed8);
+      color: white;
+      padding: 42px 24px 36px;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      opacity: 0.78;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.08;
+      max-width: 900px;
+    }
+
+    .subtitle {
+      max-width: 840px;
+      margin-top: 16px;
+      font-size: 18px;
+      opacity: 0.92;
+    }
+
+    main {
+      padding: 28px 24px 60px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-top: -46px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      padding: 22px;
+    }
+
+    .panel h2, .panel h3 {
+      margin-top: 0;
+    }
+
+    .note {
+      background: var(--accent-soft);
+      border-left: 5px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin: 14px 0 0;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .routine {
+      margin-top: 22px;
+      display: grid;
+      gap: 14px;
+    }
+
+    details.step {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+      overflow: hidden;
+    }
+
+    details.step[open] {
+      border-color: rgba(29, 78, 216, 0.35);
+      box-shadow: var(--shadow);
+    }
+
+    summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      user-select: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    .num {
+      flex: 0 0 auto;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .summary-text {
+      flex: 1;
+    }
+
+    .summary-text strong {
+      display: block;
+      font-size: 18px;
+    }
+
+    .summary-text span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .chevron {
+      font-size: 22px;
+      color: var(--muted);
+      transition: transform 0.2s ease;
+    }
+
+    details[open] .chevron { transform: rotate(90deg); }
+
+    .content {
+      border-top: 1px solid var(--line);
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .box {
+      border-radius: 16px;
+      padding: 16px;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+    }
+
+    .box h4 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .box li { margin: 7px 0; }
+
+    .example { background: var(--success-soft); }
+    .pitfall { background: var(--danger-soft); }
+    .question { background: var(--warning-soft); }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      resize: vertical;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 12px;
+      font: inherit;
+      background: white;
+      color: var(--ink);
+      margin-top: 12px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .actions {
+      position: sticky;
+      bottom: 0;
+      background: rgba(246, 247, 251, 0.94);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--line);
+      padding: 14px 24px;
+      margin: 38px -24px -60px;
+    }
+
+    .actions-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+
+    button.secondary {
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .progress {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+    }
+
+    .decision-box {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .thinking-visual {
+      margin-top: 22px;
+    }
+
+    .thinking-head {
+      margin-bottom: 18px;
+    }
+
+    .thinking-head h2 {
+      margin-bottom: 8px;
+    }
+
+    .thinking-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .path {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: #f9fafb;
+    }
+
+    .path h3 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+
+    .bad-path {
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+
+    .good-path {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .path-steps,
+    .ladder {
+      display: grid;
+      gap: 10px;
+    }
+
+    .path-step,
+    .ladder-step {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .path-step strong,
+    .ladder-step strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    .path-step span,
+    .ladder-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .path-arrow {
+      text-align: center;
+      font-size: 24px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .step-label {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: white;
+      background: var(--accent);
+    }
+
+    .warning-box,
+    .success-box,
+    .mini-note {
+      margin-top: 14px;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+    }
+
+    .warning-box {
+      background: #fff1f2;
+      border-left: 5px solid #dc2626;
+    }
+
+    .success-box {
+      background: #ecfdf5;
+      border-left: 5px solid #059669;
+    }
+
+    .thinking-footer {
+      margin-top: 16px;
+    }
+
+    .mini-note {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+    }
+
+    .bonus-section {
+      margin-top: 22px;
+    }
+
+    .signal-grid,
+    .bias-grid,
+    .levels-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .signal-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bias-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .levels-grid {
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 14px;
+    }
+
+    .bonus-card {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .bonus-card h3,
+    .bonus-card h4 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .bonus-card p {
+      margin: 7px 0;
+    }
+
+    .bonus-card .label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .trigger-card {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .puzzle-card {
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+
+    .antidote {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: white;
+      border-left: 4px solid var(--accent);
+      font-size: 14px;
+    }
+
+    .level-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    .level-card strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .if-yes { border-left: 5px solid var(--success); }
+    .if-no { border-left: 5px solid var(--danger); }
+
+    @media (max-width: 850px) {
+      .intro-grid, .content, .decision-box, .thinking-compare, .signal-grid, .bias-grid, .levels-grid { grid-template-columns: 1fr; }
+      header { padding-top: 32px; }
+      .intro-grid { margin-top: -28px; }
+    }
+
+    @media print {
+      header, .actions, .chevron { display: none; }
+      body { background: white; }
+      main { padding: 0; }
+      .intro-grid, .content, .decision-box { display: block; }
+      details.step { break-inside: avoid; margin-bottom: 16px; box-shadow: none; }
+      details.step:not([open]) .content { display: grid; }
+      .panel { box-shadow: none; margin-bottom: 16px; }
+      textarea { min-height: 90px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">Работен инструмент за ментори</div>
+      <h1>Подготовка преди посещение</h1>
+      <p class="subtitle">От налични данни към работна хипотеза, фокус на посещението и следваща стъпка за подкрепа.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="intro-grid">
+        <div class="panel">
+          <h2>Как се ползва?</h2>
+          <p>Отвори всяка стъпка, прегледай подвъпросите, виж примерите и попълни своите бележки. Целта не е да направиш “перфектен анализ”, а да влезеш в училището с по-ясен фокус и готовност да адаптираш плана си.</p>
+          <div class="note"><strong>Ключова идея:</strong> Отиваме с план, не с присъда. Данните ни дават фокус, но посещението ни помага да проверим дали сме разбрали правилно ситуацията.</div>
+        </div>
+        <div class="panel">
+          <h3>Мини правило</h3>
+          <p>Преди да решиш какво ще правиш, отдели:</p>
+          <div class="mini-grid">
+            <div class="chip">какво виждаш</div>
+            <div class="chip">какво предполагаш</div>
+            <div class="chip">какво ще провериш</div>
+            <div class="chip">как ще действаш</div>
+          </div>
+          <p class="small">Не бъркай сигнал с обяснение, хипотеза със заключение и решение с действие.</p>
+        </div>
+      </section>
+
+      <section class="thinking-visual panel">
+        <div class="thinking-head">
+          <h2>Къде най-често прескачаме твърде бързо?</h2>
+          <p class="small">
+            Данните са вход към по-добро решение, но често скачаме директно от сигнал към извод.
+            По-полезната рутина е: данни → наблюдение → хипотеза → проверка → решение.
+          </p>
+        </div>
+
+        <div class="thinking-compare">
+          <div class="path bad-path">
+            <h3>Често срещан shortcut</h3>
+            <div class="path-steps">
+              <div class="path-step">
+                <div class="step-label">1</div>
+                <strong>Данни</strong>
+                <span>Виждам нисък резултат, ниско ниво или проблемен коментар.</span>
+              </div>
+              <div class="path-arrow">→</div>
+              <div class="path-step">
+                <div class="step-label">2</div>
+                <strong>Извод</strong>
+                <span>„Значи знам какъв е проблемът.“</span>
+              </div>
+              <div class="path-arrow">→</div>
+              <div class="path-step">
+                <div class="step-label">3</div>
+                <strong>Решение</strong>
+                <span>Отивам с готов отговор, без да проверя дали е правилният.</span>
+              </div>
+            </div>
+            <div class="warning-box">
+              <strong>Риск:</strong> Бъркаме сигнал с обяснение и действаме прекалено бързо.
+            </div>
+          </div>
+
+          <div class="path good-path">
+            <h3>По-добрата рутина</h3>
+            <div class="ladder">
+              <div class="ladder-step">
+                <div class="step-label">1</div>
+                <strong>Данни</strong>
+                <span>Какво имам от протоколи, нива, проценти, ученически данни, коментари?</span>
+              </div>
+              <div class="ladder-step">
+                <div class="step-label">2</div>
+                <strong>Наблюдение</strong>
+                <span>Какво изпъква — модел, разлика, промяна, липса, противоречие?</span>
+              </div>
+              <div class="ladder-step">
+                <div class="step-label">3</div>
+                <strong>Хипотеза</strong>
+                <span>Какво <em>може</em> да стои зад това?</span>
+              </div>
+              <div class="ladder-step">
+                <div class="step-label">4</div>
+                <strong>Проверка</strong>
+                <span>Какво трябва да видя/чуя на място, за да избера правилния ход?</span>
+              </div>
+              <div class="ladder-step">
+                <div class="step-label">5</div>
+                <strong>Решение</strong>
+                <span>Какво ще направя, ако хипотезата се потвърди — и какво ще променя, ако не?</span>
+              </div>
+            </div>
+            <div class="success-box">
+              <strong>По-силен ход:</strong> Отиваме с план, но не и с присъда.
+            </div>
+          </div>
+        </div>
+
+        <div class="thinking-footer">
+          <div class="mini-note">
+            <strong>Бърза проверка:</strong>
+            Ако си на път да кажеш „Ясно ми е какъв е проблемът“, спри и попитай:
+            <em>Какво още трябва да проверя, преди да избера следващата стъпка?</em>
+          </div>
+        </div>
+      </section>
+
+      <section class="bonus-section panel">
+        <div class="thinking-head">
+          <h2>Преди да започнеш: какъв тип сигнал имаш?</h2>
+          <p class="small">Не всички данни изискват една и съща мисловна рутина. Понякога имаме ясен праг, който задейства действие. Друг път имаме пъзел, който изисква хипотеза и проверка.</p>
+        </div>
+        <div class="signal-grid">
+          <div class="bonus-card trigger-card">
+            <span class="label">Тип 1</span>
+            <h3>Trigger сигнал</h3>
+            <p><strong>Кога?</strong> Има предварително важен праг или минимален стандарт.</p>
+            <p><strong>Пример:</strong> под 30% покритие по ключов индикатор; липсват протоколи; следващите стъпки масово са празни или твърде общи.</p>
+            <div class="antidote"><strong>Рутина:</strong> провери качеството на данните → активирай предварително договорен ход → проследи дали има промяна.</div>
+          </div>
+          <div class="bonus-card puzzle-card">
+            <span class="label">Тип 2</span>
+            <h3>Диагностичен сигнал</h3>
+            <p><strong>Кога?</strong> Има разминаване, изненада, вътрешна разлика или неясно обяснение.</p>
+            <p><strong>Пример:</strong> ЛЕ е високо по стратегия, но ниско по анализ; ПЕ има активни задачи, но учениците не знаят как да подобрят работата си.</p>
+            <div class="antidote"><strong>Рутина:</strong> формулирай хипотеза → провери на място → избери действие според това, което се потвърждава.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="routine" id="routine">
+        <details class="step" open>
+          <summary>
+            <div class="num">1</div>
+            <div class="summary-text">
+              <strong>Какви данни гледам?</strong>
+              <span>Събери наличните сигнали преди посещението.</span>
+            </div>
+            <div class="chevron">›</div>
+          </summary>
+          <div class="content">
+            <div class="box question">
+              <h4>Подвъпроси</h4>
+              <ul>
+                <li>Имам ли данни от последното посещение или от всички посещения до момента?</li>
+                <li>Какво имам за ЛЕ, ПЕ и учениците?</li>
+                <li>Имам ли качествени коментари и следващи стъпки, не само нива/проценти?</li>
+                <li>Кои данни са актуални за това посещение?</li>
+              </ul>
+            </div>
+            <div class="box example">
+              <h4>Пример</h4>
+              <ul>
+                <li>ЛЕ: нива по 2.3 и 3.2.</li>
+                <li>ПЕ: протоколи от наблюдения и следващи стъпки.</li>
+                <li>Ученици: анкета за саморегулирано учене.</li>
+                <li>Ангажираност: % ученици в 5/10/20/30 минута.</li>
+              </ul>
+            </div>
+            <div class="box pitfall">
+              <h4>Капани</h4>
+              <ul>
+                <li>Да гледам само числата и да пропусна коментарите.</li>
+                <li>Да приема липсата на данни като липса на проблем.</li>
+                <li>Да сравнявам проценти без да знам колко наблюдения стоят зад тях.</li>
+              </ul>
+            </div>
+            <div class="box full">
+              <h4>Моите бележки</h4>
+              <textarea placeholder="Какви данни имам за това училище/екип преди посещението?"></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>
+            <div class="num">2</div>
+            <div class="summary-text">
+              <strong>Какво наблюдавам?</strong>
+              <span>Опиши сигналите, без още да ги обясняваш.</span>
+            </div>
+            <div class="chevron">›</div>
+          </summary>
+          <div class="content">
+            <div class="box question">
+              <h4>Какво търся?</h4>
+              <ul>
+                <li>Ниско/високо ниво или процент.</li>
+                <li>Промяна спрямо предишно посещение.</li>
+                <li>Разлика между учители, класове, категории или екипи.</li>
+                <li>Повтарящ се качествен коментар.</li>
+                <li>Противоречие между източници.</li>
+                <li>Липсващи данни.</li>
+              </ul>
+            </div>
+            <div class="box example">
+              <h4>Пример</h4>
+              <ul>
+                <li>ЛЕ е високо по стратегическа посока, но по-ниско по анализ на данни за учителите.</li>
+                <li>В ПЕ протоколите има активни задачи, но неясни критерии за успех.</li>
+                <li>Учениците дават нисък резултат на “знам как да подобря работата си”.</li>
+              </ul>
+            </div>
+            <div class="box pitfall">
+              <h4>Капани</h4>
+              <ul>
+                <li>Да кажа “ЛЕ не може да анализира данни”, вместо “виждам ниско ниво по 3.2”.</li>
+                <li>Да превърна единичен случай в модел.</li>
+                <li>Да игнорирам нещо изненадващо, защото не пасва на очакванията ми.</li>
+              </ul>
+            </div>
+            <div class="box full">
+              <h4>На кое ниво гледам данните?</h4>
+              <div class="levels-grid">
+                <div class="level-card"><strong>Училище</strong> Как изглежда спрямо други училища в моята група?</div>
+                <div class="level-card"><strong>ЛЕ / ПЕ</strong> Къде има синхрон или разминаване между екипите?</div>
+                <div class="level-card"><strong>Вътре в екипа</strong> Има ли големи разлики между учители или членове на ЛЕ?</div>
+                <div class="level-card"><strong>Индикатор</strong> Коя конкретна практика дърпа напред или назад?</div>
+                <div class="level-card"><strong>Ученици</strong> Вижда ли се ефектът в преживяването или поведението на учениците?</div>
+              </div>
+            </div>
+            <div class="box full">
+              <h4>Моите наблюдения</h4>
+              <textarea placeholder="Какво изпъква в данните? Опиши го като сигнал, не като заключение."></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>
+            <div class="num">3</div>
+            <div class="summary-text">
+              <strong>Каква е работната ми хипотеза?</strong>
+              <span>Формулирай временно обяснение, не окончателна присъда.</span>
+            </div>
+            <div class="chevron">›</div>
+          </summary>
+          <div class="content">
+            <div class="box question">
+              <h4>Подвъпроси</h4>
+              <ul>
+                <li>Какво може да стои зад тези сигнали?</li>
+                <li>Това въпрос на яснота, умение, процес, условия, ангажираност или доверие ли е?</li>
+                <li>Каква е поне една алтернативна хипотеза?</li>
+                <li>На какво стъпва интерпретацията ми — данни, опит, контекст, предишни случаи?</li>
+              </ul>
+            </div>
+            <div class="box example">
+              <h4>Примерна формулировка</h4>
+              <ul>
+                <li>“Възможно е ЛЕ да има нужда не от още мотивация, а от калибриране как изглежда конкретна evidence-based обратна връзка след час.”</li>
+                <li>“Алтернативно, може проблемът да е не в умението за ОВ, а в липса на процес за проследяване.”</li>
+              </ul>
+            </div>
+            <div class="box pitfall">
+              <h4>Капани</h4>
+              <ul>
+                <li>Да използвам стар етикет: “това училище винаги е така”.</li>
+                <li>Да имам само една хипотеза.</li>
+                <li>Да бъркам професионална интуиция с доказателство.</li>
+              </ul>
+            </div>
+            <div class="box full">
+              <h4>Моята хипотеза</h4>
+              <textarea placeholder="Възможно е основната нужда сега да е... защото виждам... Алтернативно може да е..."></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>
+            <div class="num">4</div>
+            <div class="summary-text">
+              <strong>Какво трябва да проверя на място?</strong>
+              <span>Реши какво трябва да видиш или чуеш по време на посещението.</span>
+            </div>
+            <div class="chevron">›</div>
+          </summary>
+          <div class="content">
+            <div class="box question">
+              <h4>Подвъпроси</h4>
+              <ul>
+                <li>Какво би подкрепило хипотезата ми?</li>
+                <li>Какво би ме накарало да я променя?</li>
+                <li>Какво трябва да наблюдавам в часа?</li>
+                <li>Какво трябва да попитам ЛЕ или ПЕ?</li>
+                <li>Какъв липсващ контекст трябва да събера?</li>
+              </ul>
+            </div>
+            <div class="box example">
+              <h4>Пример</h4>
+              <ul>
+                <li>Ако хипотезата е за обратна връзка, гледам дали ОВ съдържа конкретна следваща стъпка.</li>
+                <li>С ЛЕ проверявам дали виждаме едни и същи evidence в часа.</li>
+                <li>С ПЕ проверявам дали следващата стъпка е ясна и приложима.</li>
+              </ul>
+            </div>
+            <div class="box pitfall">
+              <h4>Капани</h4>
+              <ul>
+                <li>Да отида само да “изпълня план”, без да проверя дали планът пасва.</li>
+                <li>Да търся само потвърждение.</li>
+                <li>Да гледам твърде много неща наведнъж и да загубя фокус.</li>
+              </ul>
+            </div>
+            <div class="box full">
+              <h4>Какво ще проверя?</h4>
+              <textarea placeholder="На посещението трябва да видя/чуя/проверя..."></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>
+            <div class="num">5</div>
+            <div class="summary-text">
+              <strong>Какъв е планът ми?</strong>
+              <span>Подготви план А и условие за промяна на плана.</span>
+            </div>
+            <div class="chevron">›</div>
+          </summary>
+          <div class="content">
+            <div class="box question">
+              <h4>Подвъпроси</h4>
+              <ul>
+                <li>Какво ще направя, ако хипотезата се потвърди?</li>
+                <li>Какво ще променя, ако се окаже друго?</li>
+                <li>Кой трябва да участва — ЛЕ, ПЕ, директор, конкретни учители?</li>
+                <li>Каква следваща стъпка трябва да остане след посещението?</li>
+              </ul>
+            </div>
+            <div class="box example">
+              <h4>Пример</h4>
+              <ul>
+                <li>Ако проблемът е ОВ: моделирам разговор след час и давам структура evidence → ефект → следваща стъпка.</li>
+                <li>Ако проблемът е процес: работя с ЛЕ върху график, роли и проследяване.</li>
+              </ul>
+            </div>
+            <div class="box pitfall">
+              <h4>Капани</h4>
+              <ul>
+                <li>Да завърша с твърде общо “ще подкрепя екипа”.</li>
+                <li>Да избера обучение, когато всъщност трябва процес или коучинг.</li>
+                <li>Да не оставя конкретна следваща стъпка.</li>
+              </ul>
+            </div>
+            <div class="box full">
+              <h4>Моят план</h4>
+              <div class="decision-box">
+                <div class="box if-yes">
+                  <h4>Ако хипотезата се потвърди</h4>
+                  <textarea placeholder="Ще..."></textarea>
+                </div>
+                <div class="box if-no">
+                  <h4>Ако се окаже друго</h4>
+                  <textarea placeholder="Ще променя плана така..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>
+            <div class="num">6</div>
+            <div class="summary-text">
+              <strong>Как ще разбера дали ходът е бил полезен?</strong>
+              <span>Определи ранен сигнал за проследяване.</span>
+            </div>
+            <div class="chevron">›</div>
+          </summary>
+          <div class="content">
+            <div class="box question">
+              <h4>Подвъпроси</h4>
+              <ul>
+                <li>Какъв ранен сигнал очаквам след посещението?</li>
+                <li>Какво ще гледам в следващия протокол?</li>
+                <li>Какво трябва да се промени в поведението на ЛЕ, ПЕ или учениците?</li>
+                <li>Кога ще се върна към тази хипотеза?</li>
+              </ul>
+            </div>
+            <div class="box example">
+              <h4>Пример</h4>
+              <ul>
+                <li>В следващите разговори след час има конкретна следваща стъпка.</li>
+                <li>ЛЕ използва evidence, а не общи впечатления.</li>
+                <li>ПЕ може да каже какво точно ще промени в следващия урок.</li>
+              </ul>
+            </div>
+            <div class="box pitfall">
+              <h4>Капани</h4>
+              <ul>
+                <li>Да приемем проведената среща за резултат.</li>
+                <li>Да не се върнем към следващата стъпка.</li>
+                <li>Да чакаме крайни резултати, без да следим ранни сигнали.</li>
+              </ul>
+            </div>
+            <div class="box full">
+              <h4>Какво ще проследя?</h4>
+              <textarea placeholder="След посещението ще следя..."></textarea>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="bonus-section panel">
+        <div class="thinking-head">
+          <h2>Бонус: 6 когнитивни капана при четене на данни</h2>
+          <p class="small">Тези капани не означават, че мислим “лошо”. Те са нормални shortcuts. Работата с данни става по-силна, когато знаем къде могат да ни подведат.</p>
+        </div>
+        <div class="bias-grid">
+          <div class="bonus-card">
+            <h4>1. Склонност към потвърждаване</h4>
+            <p>Търся и помня данни, които подкрепят това, което вече мисля.</p>
+            <p><strong>Пример:</strong> “ЛЕ не поема собственост” — и виждам само сигналите, които доказват това.</p>
+            <div class="antidote"><strong>Антидот:</strong> Какво би ме накарало да сменя интерпретацията си?</div>
+          </div>
+          <div class="bonus-card">
+            <h4>2. Най-видимото изглежда най-важно</h4>
+            <p>Един ярък случай, конфликт или силен коментар засенчва цялата картина.</p>
+            <p><strong>Пример:</strong> Една трудна среща започва да определя как виждам целия екип.</p>
+            <div class="antidote"><strong>Антидот:</strong> Това единичен силен случай ли е, или устойчив модел?</div>
+          </div>
+          <div class="bonus-card">
+            <h4>3. Последното изглежда най-представително</h4>
+            <p>Последното посещение става “истината” за училището.</p>
+            <p><strong>Пример:</strong> Последният час беше хаотичен → решавам, че екипът е в спад.</p>
+            <div class="antidote"><strong>Антидот:</strong> Как изглежда това в динамика спрямо предишните посещения?</div>
+          </div>
+          <div class="bonus-card">
+            <h4>4. Средното скрива важни разлики</h4>
+            <p>Гледам училището или екипа като цяло и пропускам различните профили вътре.</p>
+            <p><strong>Пример:</strong> ПЕ е “средно ниво 2”, но двама учители са много напред, а трима имат базова нужда.</p>
+            <div class="antidote"><strong>Антидот:</strong> Какво се вижда, ако разбия данните по хора, класове, екипи или индикатори?</div>
+          </div>
+          <div class="bonus-card">
+            <h4>5. Бъркам поведение с причина</h4>
+            <p>Виждам поведение и веднага го обяснявам с нагласа, характер или мотивация.</p>
+            <p><strong>Пример:</strong> “ПЕ не прилага стъпките, защото не е мотивиран.”</p>
+            <div class="antidote"><strong>Антидот:</strong> Кои са поне две други възможни обяснения?</div>
+          </div>
+          <div class="bonus-card">
+            <h4>6. Фалшив избор</h4>
+            <p>Свивам решението до “или А, или Б”, когато може да има комбинация, последователност или трети вариант.</p>
+            <p><strong>Пример:</strong> “Трябва ни или обучение, или индивидуална подкрепа”, вместо “може да започнем с общо калибриране и после да диференцираме по нужда”.</p>
+            <div class="antidote"><strong>Антидот:</strong> Това наистина ли са взаимно изключващи се опции? Има ли “и/и”, “първо/после” или трети ход?</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="actions">
+      <div class="actions-inner">
+        <div class="progress">Съвет: попълни бележките, после използвай “Печат / PDF”, за да запазиш картата.</div>
+        <div>
+          <button class="secondary" onclick="toggleAll(true)">Отвори всички</button>
+          <button class="secondary" onclick="toggleAll(false)">Затвори всички</button>
+          <button onclick="window.print()">Печат / PDF</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function toggleAll(open) {
+      document.querySelectorAll('details.step').forEach(step => {
+        step.open = open;
+      });
+    }
+  </script>
+</body>
+</html>
